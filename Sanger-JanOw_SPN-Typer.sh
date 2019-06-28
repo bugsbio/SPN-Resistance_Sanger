@@ -66,10 +66,8 @@ do
     if [[ -n "$line" ]]
     then
         justPBPs=$(echo "$line" | awk -F"\t" '{print $2}' | tr ':' '\t')
-        justPBP_BIN=$(echo "$line" | awk -F"\t" '{print $2}' | tr ':' ',')
     fi
     printf "$justPBPs\t" >> "$tabl_out"
-    printf "$justPBP_BIN," >> "$bin_out"
 done
 
 pbpID=$(tail -n1 "TEMP_pbpID_Results.txt" | awk -F"\t" '{print $2}')
