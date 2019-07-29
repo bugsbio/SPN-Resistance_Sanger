@@ -133,7 +133,7 @@ done < "$fastq_list"
 #bsub -G team81 -J SPN_Run[1-$(cat $out_jobCntrl/job-control.txt | wc -l)] -cwd -o ${out_qsub}output.%J -e ${out_qsub}errorfile.%J ./Sanger-JanOw_SPN-Typer.sh $out_jobCntrl
 #bsub -G team81 -R"select[mem>10000] rusage[mem=10000]" -M10000 -J SPN_Run[1-2] -o ${out_qsub}output.%J.%I -e ${out_qsub}errorfile.%J.%I "sh Sanger-JanOw_SPN-Typer.sh $out_jobCntrl"
 
-bsub -G team81 -R"select[mem>10000] rusage[mem=10000]" -M10000 -J SPN_Run[1-$(cat $out_jobCntrl/job-control.txt | wc -l)] -o ${out_qsub}output.%J.%I -e ${out_qsub}errorfile.%J.%I "sh Sanger-JanOw_SPN-Typer.sh $out_jobCntrl"
+bsub -R"select[mem>10000] rusage[mem=10000]" -M10000 -J SPN_Run[1-$(cat $out_jobCntrl/job-control.txt | wc -l)] -o ${out_qsub}output.%J.%I -e ${out_qsub}errorfile.%J.%I "sh Sanger-JanOw_SPN-Typer.sh $out_jobCntrl"
 sleep 30
 
 while [[ $(bjobs -noheader | wc -l) -ne 0 ]]
