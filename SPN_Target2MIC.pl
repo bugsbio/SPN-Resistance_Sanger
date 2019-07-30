@@ -7,8 +7,6 @@ use Data::Dumper;
 use Getopt::Std;
 use File::Copy qw(copy);
 use Env;
-use lib $ENV{MODULESHOME}."/init";
-use perl;
 
 ###Start Doing Stuff###
 my $Res_output = "RES-MIC_".$ARGV[1];
