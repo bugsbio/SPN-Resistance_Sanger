@@ -48,8 +48,8 @@ fastqc "$fastq2_trimd" --outdir=./"$just_name"_R2_cut
 PBP-Gene_Typer.pl -1 "$readPair_1" -2 "$readPair_2" -r "$allDB_dir/MOD_bLactam_resistance.fasta" -n "$just_name" -s SPN -p 1A,2B,2X
 
 ###Predict bLactam MIC###
-scr1="temp_path/bLactam_MIC_Rscripts/PBP_AA_sampledir_to_MIC_20180710.sh"
-bash "$scr1" "$sampl_out" "$temp_path"
+scr1="$temp_path/bLactam_MIC_Rscripts/PBP_AA_sampledir_to_MIC_20180710.sh"
+"$scr1" "$sampl_out" "$temp_path"
 
 ###Call GBS Misc. Resistances###
 SPN_Res_Typer.pl -1 "$readPair_1" -2 "$readPair_2" -d "$allDB_dir" -r SPN_Res_Gene-DB_Final.fasta -n "$just_name"
