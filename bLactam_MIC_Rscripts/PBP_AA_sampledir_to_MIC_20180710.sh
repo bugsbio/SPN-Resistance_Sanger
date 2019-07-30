@@ -1,7 +1,4 @@
 #!/bin/bash -l
-source /etc/profile.d/modules.sh
-#module load EMBOSS/6.4.0
-#module load  R/3.3.2
 
 x1="0"
 if [ -d "$1" ]; then
@@ -95,4 +92,3 @@ echo "BLACTAM MIC output file:" "$d1""/BLACTAM_MIC_RF_with_SIR.txt"
 rm -f temp* 
 #rm -rf $AAseqDir
 
-#module unload EMBOSS/6.4.0

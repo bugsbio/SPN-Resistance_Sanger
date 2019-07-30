@@ -7,13 +7,6 @@ use Data::Dumper;
 use Getopt::Std;
 use File::Basename;
 
-###MODULE LOAD###
-#module load perl/5.12.3
-#module load ncbi-blast+/2.2.29
-#module load BEDTools/2.17.0
-#module load Python/2.7
-#module load prodigal/2.60
-
 sub checkOptions {
     my %opts;
     getopts('h1:2:q:o:n:L:I:S:f', \%opts);

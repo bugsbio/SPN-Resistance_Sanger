@@ -3,18 +3,11 @@
 use strict;
 use warnings;
 use Data::Dumper;
-#use Getopt::Long;
 use Getopt::Std;
 use File::Copy qw(copy);
 use Env;
 
 print Dumper \%INC;
-
-###MODULE LOAD###
-#module load samtools/0.1.18
-#module load bowtie2/2.1.0
-#module load Python/2.7
-#module load freebayes/0.9.21
 
 sub checkOptions {
     my %opts;
@@ -594,11 +587,7 @@ if ($Res_Targets{"RPOB"} eq "pos") {
 ###The FOLA-1 marker for tmR resistance may contain mosiac regions and must be extracted from the genome assembly###
 my $REF_seq = extractFastaByID("7__FOLA__FOLA-1__7","$res_DB");
 `echo "$REF_seq" > TEMP_FOLA_Ref.fna`;
-module "unload perl/5.22.1";
-module "load perl/5.16.1-MT";
 system("LoTrac_target.pl -1 $fastq1 -2 $fastq2 -q TEMP_FOLA_Ref.fna -S 2.2M -f -n $outName -o $outDir");
-module "unload perl/5.16.1-MT";
-module "load perl/5.22.1";
 my $FOLA_file = glob("EXTRACT_*FOLA*.fasta");
 my $FOLA_error = glob("ERROR_*FOLA*.fasta");
 my @FOLA_output;
@@ -714,11 +703,7 @@ if ($Res_Targets{"GYRA"} eq "pos") {
 if ($Res_Targets{"RPLD1"} eq "pos") {
     my $RPLD1_ref = extractFastaByID("11__RPLD1__RPLD1-1__11",$res_DB);
     `echo "$RPLD1_ref" > TEMP_RPLD1_Ref.fna`;
-    module "unload perl/5.22.1";
-    module "load perl/5.16.1-MT";
     system("LoTrac_target.pl -1 $fastq1 -2 $fastq2 -q TEMP_RPLD1_Ref.fna -S 2.2M -f -n $outName -L 0.8 -I 0.8");
-    module "unload perl/5.16.1-MT";
-    module "load perl/5.22.1";
     my $RPLD1_file = glob("EXTRACT*RPLD1-1*.fasta");
     my $RPLD1_error = glob("ERROR*RPLD1-1*.fasta");
     my @RPLD1_output;
@@ -907,15 +892,11 @@ my $target = "1__FOLP__FOLP-1__1";
 #system("samtools view -bS FOLP_target_seq.sam > FOLP_target_seq.bam");
 #system("samtools index FOLP_target_seq.bam FOLP_target_seq.bai");
 
-module "load bowtie2/2.1.0";
-module "load samtools/0.1.18";
 system("bowtie2 -1 $fastq1 -2 $fastq2 --very-sensitive-local --no-unal -a -x $ref_dir/SPN_FOLP_Gene-DB_Final.fasta -S FOLP_target_seq.sam");
 system("samtools view -bS FOLP_target_seq.sam | samtools sort - FOLP_target_seq_sort");
 system("samtools index FOLP_target_seq_sort.bam");
 system("freebayes -q 25 -p1 -f $ref_dir/SPN_FOLP_Gene-DB_Final.fasta FOLP_target_seq_sort.bam -v FOLP_target_seq.vcf");
 #system("vcffilter -f 'QUAL > 100 & DP > 25' -g 'GQ > 30 & AO > 20 & GT = 1' TEMP_FOLP_target_seq.vcf > FOLP_target_seq.vcf");
-module "unload bowtie2/2.1.0";
-module "unload samtools/0.1.18";
 
 #$REF_seq = extractFastaByID("$target","$ref_dir/SPN_FOLP_Gene-DB_Final.fasta");
 #open(my $rf,'>',"FOLP_target_ref.fna");

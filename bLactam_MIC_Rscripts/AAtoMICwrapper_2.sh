@@ -37,7 +37,6 @@ scrdir="/scicomp/groups/OID/NCIRD/DBD/RDB/Strep_Lab/External/share/PBP_AA_to_MIC
 cp $scrdir"scripts/Ref_PBP_3.faa" .
 cp $AAseqDir"/"*".faa" .
 
-#module load clustal-omega/1.2
 scr1="/scicomp/groups/OID/NCIRD/DBD/RDB/Strep_Lab/External/share/PBP_AA_to_MIC/scripts/Build_PBP_AA_tableR3.2.2.R"
 Rscript $scr1 $faaDir
 

@@ -3,13 +3,8 @@
 use strict;
 use warnings;
 use Data::Dumper;
-#use Getopt::Long;
 use Getopt::Std;
 use File::Basename;
-
-###MODULE LOAD###
-#module load ncbi-blast+/2.2.30
-#module load BEDTools/2.17.0
 
 sub checkOptions {
     my %opts;
