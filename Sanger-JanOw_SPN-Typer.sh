@@ -17,6 +17,19 @@ allDB_dir=${PARAM[2]}
 batch_out=${PARAM[3]}
 sampl_out=${PARAM[4]}
 
+echo readPair_1:$readPair_1
+echo readPair_2=$readPair_2
+echo allDB_dir=$allDB_dir
+echo batch_out=$batch_out
+echo sampl_out=$sampl_out
+
+echo Catting job-control
+echo cat $1/job-control.txt
+
+echo
+echo
+echo
+echo SGE_TASK_ID:${SGE_TASK_ID}
 
 ###Start Doing Stuff###
 cd "$sampl_out"
