@@ -25,11 +25,12 @@ echo sampl_out=$sampl_out
 
 echo Catting job-control
 echo cat $1/job-control.txt
-
+cat $1/job-control.txt
 echo
 echo
 echo
 echo SGE_TASK_ID:${SGE_TASK_ID}
+echo PWD:$(pwd)
 
 ###Start Doing Stuff###
 cd "$sampl_out"
@@ -58,10 +59,14 @@ fastqc "$fastq2_trimd" --outdir=./"$just_name"_R2_cut
 
 
 ###Call GBS bLactam Resistances###
+echo Executing:PBP-Gene_Typer.pl -1 "$readPair_1" -2 "$readPair_2" -r "$allDB_dir/MOD_bLactam_resistance.fasta" -n "$just_name" -s SPN -p 1A,2B,2X
+echo from $(pwd)
 PBP-Gene_Typer.pl -1 "$readPair_1" -2 "$readPair_2" -r "$allDB_dir/MOD_bLactam_resistance.fasta" -n "$just_name" -s SPN -p 1A,2B,2X
 
 ###Predict bLactam MIC###
 scr1="$temp_path/bLactam_MIC_Rscripts/PBP_AA_sampledir_to_MIC_20180710.sh"
+echo Executing "$scr1" "$sampl_out" "$temp_path"
+echo from $(pwd)
 "$scr1" "$sampl_out" "$temp_path"
 
 ###Call GBS Misc. Resistances###
