@@ -4,7 +4,7 @@ temp_path=$(dirname $0)
 export PATH=$PATH:$temp_path
 
 ## -- begin embedded SGE options --
-read -a PARAM <<< $(/bin/sed -n ${SGE_TASK_ID}p $1/job-control.txt)
+read -a PARAM <<< $(/bin/sed -n ${LSB_JOBINDEX}p $1/job-control.txt)
 ## -- end embedded SGE options --
 
 ###This script is called for each job in the qsub array. The purpose of this code is to read in and parse a line of the job-control.txt file
@@ -17,61 +17,35 @@ allDB_dir=${PARAM[2]}
 batch_out=${PARAM[3]}
 sampl_out=${PARAM[4]}
 
-echo readPair_1:$readPair_1
-echo readPair_2=$readPair_2
-echo allDB_dir=$allDB_dir
-echo batch_out=$batch_out
-echo sampl_out=$sampl_out
-
-echo Catting job-control
-echo cat $1/job-control.txt
-cat $1/job-control.txt
-echo
-echo
-echo
-echo SGE_TASK_ID:${SGE_TASK_ID}
-echo PWD:$(pwd)
-
 ###Start Doing Stuff###
 cd "$sampl_out"
 batch_name=$(echo "$sampl_out" | awk -F"/" '{print $(NF-2)}')
 just_name=$(basename "$sampl_out")
 
-###Pre-Process Paired-end Reads###
-#fastq1_name=$(basename "$PREreadPair_1")
-#fastq2_name=$(basename "$PREreadPair_2")
-#readPair_1=DS_"$fastq1_name"
-#readPair_2=DS_"$fastq2_name"
-#seqtk sample "$PREreadPair_1" 600000 | gzip > "$readPair_1"
-#seqtk sample "$PREreadPair_2" 600000 | gzip > "$readPair_2"
-fastq1_trimd=cutadapt_"$just_name"_S1_L001_R1_001.fastq
-fastq2_trimd=cutadapt_"$just_name"_S1_L001_R2_001.fastq
-cutadapt -b AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC -q 20 --minimum-length 50 --paired-output temp2.fastq -o temp1.fastq $readPair_1 $readPair_2
-cutadapt -b AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT -q 20 --minimum-length 50 --paired-output $fastq1_trimd -o $fastq2_trimd temp2.fastq temp1.fastq
-rm temp1.fastq
-rm temp2.fastq
+### fastqc
+echo Executing fastqc | tee /dev/stderr
 
-###Run fastqc on Processed Reads
-mkdir "$just_name"_R1_cut
-mkdir "$just_name"_R2_cut
-fastqc "$fastq1_trimd" --outdir=./"$just_name"_R1_cut
-fastqc "$fastq2_trimd" --outdir=./"$just_name"_R2_cut
+fastqc_step.sh "${readPair_1}" "${readPair_2}" "${just_name}"
+
+
 
 
 ###Call GBS bLactam Resistances###
-echo Executing:PBP-Gene_Typer.pl -1 "$readPair_1" -2 "$readPair_2" -r "$allDB_dir/MOD_bLactam_resistance.fasta" -n "$just_name" -s SPN -p 1A,2B,2X
-echo from $(pwd)
+echo Executing:PBP-Gene_Typer.pl | tee /dev/stderr
 PBP-Gene_Typer.pl -1 "$readPair_1" -2 "$readPair_2" -r "$allDB_dir/MOD_bLactam_resistance.fasta" -n "$just_name" -s SPN -p 1A,2B,2X
 
 ###Predict bLactam MIC###
 scr1="$temp_path/bLactam_MIC_Rscripts/PBP_AA_sampledir_to_MIC_20180710.sh"
-echo Executing "$scr1" "$sampl_out" "$temp_path"
-echo from $(pwd)
+echo Executing "$scr1" | tee /dev/stderr
 "$scr1" "$sampl_out" "$temp_path"
 
 ###Call GBS Misc. Resistances###
+echo Executing SPN_Res_Typer.pl | tee /dev/stderr
 SPN_Res_Typer.pl -1 "$readPair_1" -2 "$readPair_2" -d "$allDB_dir" -r SPN_Res_Gene-DB_Final.fasta -n "$just_name"
+echo Executing SPN_Target2MIC.pl | tee /dev/stderr
 SPN_Target2MIC.pl OUT_Res_Results.txt "$just_name"
+
+echo Processing outputs | tee /dev/stderr
 
 ###Output the emm type/MLST/drug resistance data for this sample to it's results output file###
 tabl_out="TABLE_Isolate_Typing_results.txt"
