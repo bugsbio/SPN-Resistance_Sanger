@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 
-$out_jobCntrl=$1
-$out_analysis=$2
+out_jobCntrl=$1
+out_analysis=$2
 
 ###Output the emm type/MLST/drug resistance data for this sample to it's results output file###
 batch_name=$(head -n1 $out_jobCntrl/job-control.txt | awk -F" " '{print $5}' | awk -F"/" '{print $(NF-2)}')
