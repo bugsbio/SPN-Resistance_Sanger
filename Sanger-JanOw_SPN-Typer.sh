@@ -82,7 +82,7 @@ done < RES-MIC_"$just_name"
 if [[ -e $(echo ./velvet_output/*_Logfile.txt) ]]
 then
     vel_metrics=$(echo ./velvet_output/*_Logfile.txt)
-    print "velvet metrics file: $vel_metrics\n";
+    echo "velvet metrics file: $vel_metrics";
     velvetMetrics.pl -i "$vel_metrics";
     line=$(cat velvet_qual_metrics.txt | tr ',' '\t')
     printf "$line\t" >> "$tabl_out"
