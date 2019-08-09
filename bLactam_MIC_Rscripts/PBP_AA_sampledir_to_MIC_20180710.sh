@@ -53,10 +53,7 @@ grep -v ">" temp1.faa >> Sample_PBP2X_AA.faa
 
 rm -f temp*
 
-#
-#scr1="/scicomp/groups/OID/NCIRD/DBD/RDB/Strep_Lab/External/share/PBP_AA_to_MIC/scripts/AAtoMICwrapper_2.sh"
-scr1="$path/bLactam_MIC_Rscripts/AAtoMICwrapper_2.sh"
-bash $scr1 $AAseqDir
+AAtoMICwrapper_2.sh $AAseqDir
 
 # Use Aspen Cluster to run; BioLinux will not work
 

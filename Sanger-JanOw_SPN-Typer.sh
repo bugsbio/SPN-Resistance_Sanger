@@ -23,29 +23,24 @@ batch_name=$(echo "$sampl_out" | awk -F"/" '{print $(NF-2)}')
 just_name=$(basename "$sampl_out")
 
 ### fastqc
-echo Executing fastqc | tee /dev/stderr
-
+echo Executing fastqc
 fastqc_step.sh "${readPair_1}" "${readPair_2}" "${just_name}"
 
-
-
-
 ###Call GBS bLactam Resistances###
-echo Executing:PBP-Gene_Typer.pl | tee /dev/stderr
+echo Executing:PBP-Gene_Typer.pl
 PBP-Gene_Typer.pl -1 "$readPair_1" -2 "$readPair_2" -r "$allDB_dir/MOD_bLactam_resistance.fasta" -n "$just_name" -s SPN -p 1A,2B,2X
 
 ###Predict bLactam MIC###
-scr1="$temp_path/bLactam_MIC_Rscripts/PBP_AA_sampledir_to_MIC_20180710.sh"
-echo Executing "$scr1" | tee /dev/stderr
-"$scr1" "$sampl_out" "$temp_path"
+echo Executing PBP_AA_sampledir_to_MIC_20180710.sh
+PBP_AA_sampledir_to_MIC_20180710.sh "$sampl_out" "$temp_path"
 
 ###Call GBS Misc. Resistances###
-echo Executing SPN_Res_Typer.pl | tee /dev/stderr
+echo Executing SPN_Res_Typer.pl
 SPN_Res_Typer.pl -1 "$readPair_1" -2 "$readPair_2" -d "$allDB_dir" -r SPN_Res_Gene-DB_Final.fasta -n "$just_name"
-echo Executing SPN_Target2MIC.pl | tee /dev/stderr
+echo Executing SPN_Target2MIC.pl 
 SPN_Target2MIC.pl OUT_Res_Results.txt "$just_name"
 
-echo Processing outputs | tee /dev/stderr
+echo Processing outputs
 
 ###Output the emm type/MLST/drug resistance data for this sample to it's results output file###
 tabl_out="TABLE_Isolate_Typing_results.txt"
