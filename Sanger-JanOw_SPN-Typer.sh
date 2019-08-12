@@ -1,7 +1,6 @@
 #!/bin/bash -l
 
 temp_path=$(dirname $0)
-export PATH=$PATH:$temp_path
 
 ## -- begin embedded SGE options --
 read -a PARAM <<< $(/bin/sed -n ${LSB_JOBINDEX}p $1/job-control.txt)

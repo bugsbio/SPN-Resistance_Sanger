@@ -29,12 +29,6 @@ else
     exit 1
 fi
 
-if [[ -z "$allDB_dir" ]]
-then
-    echo Reference directory set to "$SPN_REFERENCE_DB"
-    allDB_dir="$SPN_REFERENCE_DB"
-fi
-
 if [[ ! -z "$allDB_dir" ]]
 then
     if [[ -d "$allDB_dir" ]]
