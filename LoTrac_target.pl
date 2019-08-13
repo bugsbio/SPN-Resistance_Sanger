@@ -165,7 +165,7 @@ sub fasta_seq_length {
     my ($seq) = @_;
     #open ( my $q_seq, "<", $seq ) or die "Could not open file '$seq': $!";    
     my @lines = split /\n/, $seq;
-    my $final_line;
+    my $final_line = "";
     foreach my $line (@lines) {
 	chomp($line);
 	if ($line =~ /^>/) {
