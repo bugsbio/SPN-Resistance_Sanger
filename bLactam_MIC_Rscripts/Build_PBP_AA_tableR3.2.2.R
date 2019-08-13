@@ -11,13 +11,14 @@ Build_PBP_AA_table<- function(datafolder)
 
   setwd(datafolder)
 
-  libpath="/scicomp/groups/OID/NCIRD/DBD/RDB/Strep_Lab/External/share/PBP_AA_to_MIC/Rlib"
+  #libpath="/scicomp/groups/OID/NCIRD/DBD/RDB/Strep_Lab/External/share/PBP_AA_to_MIC/Rlib"
   #x1=.libPaths()
-  x2=c(libpath, "/usr/lib64/R/library", "/usr/share/R/library")
+  #x2=c(libpath, "/usr/lib64/R/library", "/usr/share/R/library")
+  x2=c("/usr/lib64/R/library", "/usr/share/R/library")
   .libPaths(x2)
 
   library("Biostrings")
-  cmd0="/scicomp/groups/OID/NCIRD/DBD/RDB/Strep_Lab/External/share/PBP_AA_to_MIC/bin/"
+#  cmd0="/scicomp/groups/OID/NCIRD/DBD/RDB/Strep_Lab/External/share/PBP_AA_to_MIC/bin/"
   cmd1="clustalo "
     # path to the "clustalo" software folder
 
@@ -71,7 +72,8 @@ Build_PBP_AA_table<- function(datafolder)
       writeXStringSet(seq1A[j1], file="tempSAM1A.faa", , append=T  )
     
       cmd2=" -i tempSAM1A.faa -o tempSAM1A.faa.aln --wrap=3000 --force  --output-order=input-order"
-      cmd3=paste(cmd0, cmd1, cmd2, sep="")
+      #cmd3=paste(cmd0, cmd1, cmd2, sep="")
+      cmd3=paste(cmd1, cmd2, sep="")
       system(cmd3)
 
       seqTEMP2=readAAStringSet("tempSAM1A.faa.aln", format="fasta")
@@ -141,7 +143,8 @@ Build_PBP_AA_table<- function(datafolder)
       writeXStringSet(seq2B[j1], file="tempSAM1A.faa", , append=T  )
     
       cmd2=" -i tempSAM1A.faa -o tempSAM1A.faa.aln --wrap=3000 --force  --output-order=input-order"
-      cmd3=paste(cmd0, cmd1, cmd2, sep="")
+      #cmd3=paste(cmd0, cmd1, cmd2, sep="")
+      cmd3=paste(cmd1, cmd2, sep="")
       system(cmd3)
 
       seqTEMP2=readAAStringSet("tempSAM1A.faa.aln", format="fasta")
@@ -213,7 +216,8 @@ Build_PBP_AA_table<- function(datafolder)
       writeXStringSet(seq2X[j1], file="tempSAM1A.faa", , append=T  )
     
       cmd2=" -i tempSAM1A.faa -o tempSAM1A.faa.aln --wrap=3000 --force  --output-order=input-order"
-      cmd3=paste(cmd0, cmd1, cmd2, sep="")
+      #cmd3=paste(cmd0, cmd1, cmd2, sep="")
+      cmd3=paste(cmd1, cmd2, sep="")
       system(cmd3)
 
       seqTEMP2=readAAStringSet("tempSAM1A.faa.aln", format="fasta")

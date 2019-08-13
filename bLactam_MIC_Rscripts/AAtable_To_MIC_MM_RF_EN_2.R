@@ -2,10 +2,10 @@
 
 ## Function PBP_AA_TO_MIC2
 
-PBP_AA_TO_MIC2<- function(cwd){
-  dbdir="/scicomp/groups/OID/NCIRD/DBD/RDB/Strep_Lab/External/share/PBP_AA_to_MIC/newDB/"
-  libpath="/scicomp/groups/OID/NCIRD/DBD/RDB/Strep_Lab/External/share/PBP_AA_to_MIC/Rlib"
+PBP_AA_TO_MIC2<- function(cwd, dbdir){
+  #libpath="/scicomp/groups/OID/NCIRD/DBD/RDB/Strep_Lab/External/share/PBP_AA_to_MIC/Rlib"
   #x1=.libPaths()
+  #x2=c("/usr/lib64/R/library", "/usr/share/R/library")
   x2=c(libpath, "/usr/lib64/R/library", "/usr/share/R/library")
   .libPaths(x2)
   #.libPaths(c(.libPaths(), libpath))
@@ -91,7 +91,7 @@ PBP_AA_TO_MIC2<- function(cwd){
   n2=dim(m2.1)[2]
 
 
-  m3=read.csv("/scicomp/groups/OID/NCIRD/DBD/RDB/Strep_Lab/External/share/PBP_AA_to_MIC/scripts/BLOSUM62.csv", colClasses="character", header=T) 
+  m3=read.csv(paste(dbdir, "BLOSUM62.csv", sep=""), colClasses="character", header=T) 
   colnames(m3)[2:25]=m3$src
   m2.1[m2.1=="*"]="-"
   m2.2=m2.1
