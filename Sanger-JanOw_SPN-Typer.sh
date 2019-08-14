@@ -60,7 +60,7 @@ pbpID=$(tail -n1 "TEMP_pbpID_Results.txt" | awk -F"\t" '{print $2}')
 if [[ ! "$pbpID" =~ .*NF.* ]] #&& [[ ! "$pbpID" =~ .*NEW.* ]]
 then
     echo "No NF outputs for PBP Type"
-    bLacTab=$(tail -n1 "BLACTAM_MIC_RF_with_SIR.txt" | tr ' ' '\t')
+    bLacTab=$(sed -e 's/\s\+$//g' -e 's/ /\t/g' BLACTAM_MIC_RF_with_SIR.txt | tail -n1 "BLACTAM_MIC_RF_with_SIR.txt")
     printf "$bLacTab\t" >> "$tabl_out"
 else
     echo "One of the PBP types has an NF"
