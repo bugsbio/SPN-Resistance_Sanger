@@ -1,9 +1,9 @@
 #!/usr/bin/env perl
 
 use strict;
-use warnings;
+use warnings FATAL => 'all';
+
 use Data::Dumper;
-#use Getopt::Long;
 use Getopt::Std;
 use File::Basename;
 
@@ -20,42 +20,42 @@ sub checkOptions {
     if($opts{1}) {
         $fastq1 = $opts{1};
         if( -e $fastq1) {
-            print "Paired-end Read 1 is: $fastq1\n";
+            print STDERR "Paired-end Read 1 is: $fastq1\n";
         } else {
-            print "The forward paired-end file name is not in the correct format or doesn't exist.\n";
-            print "Make sure you provide the full path (/root/path/fastq_file).\n";
+            print STDERR "The forward paired-end file name is not in the correct format or doesn't exist.\n";
+            print STDERR "Make sure you provide the full path (/root/path/fastq_file).\n";
             help();
         }
     } else {
-        print "No paired end 1 fastq file path argument given.\n";
+        print STDERR "No paired end 1 fastq file path argument given.\n";
         help();
     }
 
     if($opts{2}) {
         $fastq2 = $opts{2};
         if( -e $fastq2) {
-            print "Paired-end Read 2 is: $fastq2\n";
+            print STDERR "Paired-end Read 2 is: $fastq2\n";
         } else {
-            print "The reverse paired-end file name is not in the correct format or doesn't exist.\n";
-            print "Make sure you provide the full path (/root/path/fastq_file).\n";
+            print STDERR "The reverse paired-end file name is not in the correct format or doesn't exist.\n";
+            print STDERR "Make sure you provide the full path (/root/path/fastq_file).\n";
             help();
         }
     } else {
-        print "No paired end 2 fastq file path argument given.\n";
+        print STDERR "No paired end 2 fastq file path argument given.\n";
         help();
     }
 
     if($opts{q}) {
         $query = $opts{q};
         if (-e $query) {
-            print "File containing the query reference sequence: $query\n";
+            print STDERR "File containing the query reference sequence: $query\n";
         } else {
-            print "The location given for the query reference sequence is not in the correct format or doesn't exist.\n";
-            print "Make sure you provide the full path (/root/path/query_file).\n";
+            print STDERR "The location given for the query reference sequence is not in the correct format or doesn't exist.\n";
+            print STDERR "Make sure you provide the full path (/root/path/query_file).\n";
             help();
         }
     } else {
-        print "The location of the query reference sequence (including full path) has not been given.\n";
+        print STDERR "The location of the query reference sequence (including full path) has not been given.\n";
         help();
     }
 
@@ -63,37 +63,37 @@ sub checkOptions {
     if($opts{o}) {
         if (-d $opts{o}) {
             $outDir = $opts{o};
-            print "The output directory is: $outDir\n";
+            print STDERR "The output directory is: $outDir\n";
         } else {
             $outDir = $opts{o};
             mkdir $outDir;
-            print "The output directory has been created: $outDir\n";
+            print STDERR "The output directory has been created: $outDir\n";
         }
     } else {
-        print "The files will be output into the current directory.\n";
+        print STDERR "The files will be output into the current directory.\n";
     }
 
     if($opts{n}) {
         $outName = $opts{n};
 	chomp($outName);
-        print "The output file name prefix: $outName\n";
+        print STDERR "The output file name prefix: $outName\n";
     } else {
         $outName = `echo "$fastq1" | awk -F"/" '{print \$(NF)}' | sed 's/_S[0-9]\\+_L[0-9]\\+_R[0-9]\\+.*//g'`;
 	chomp($outName);
-        print "The default output file name prefix is: $outName\n";
+        print STDERR "The default output file name prefix is: $outName\n";
     }
 
     if($opts{S}) {
         $gSize = $opts{S};
 	if ($gSize =~ /[0-9]+[k|M|G]$/ || $gSize =~ /[0-9]+$/) {
-	    print "The given genome size is: $gSize\n";
+	    print STDERR "The given genome size is: $gSize\n";
 	} else {
-	    print "The genome size is not in the proper format.\n";
-	    print "Please provide the genome size in bp (can use k/M/G suffix).\n";
+	    print STDERR "The genome size is not in the proper format.\n";
+	    print STDERR "Please provide the genome size in bp (can use k/M/G suffix).\n";
 	    help();
         }
     } else {
-        print "The genome size argument has not been given\n";
+        print STDERR "The genome size argument has not been given\n";
         help();
     }    
 
@@ -101,31 +101,31 @@ sub checkOptions {
     if($opts{L}) {
 	if ($opts{L} >= 0 && $opts{L} <= 1) {
 	    $length = $opts{L};
-	    print "The alignment length threshold: $length\n";
+	    print STDERR "The alignment length threshold: $length\n";
 	} else {
-	    print "The alignment length threshold has to be a number between 0 and 1\n";
+	    print STDERR "The alignment length threshold has to be a number between 0 and 1\n";
 	    help();
 	}
     } else {
-	print "The default length threshold of 0.5 will be used\n";
+	print STDERR "The default length threshold of 0.5 will be used\n";
     }
 
     $identity = 0.5;
     if($opts{I}) {
 	if ($opts{I} >= 0 && $opts{I} <= 1) {
 	    $identity = $opts{I};
-	    print "The alignment identity threshold: $identity\n";
+	    print STDERR "The alignment identity threshold: $identity\n";
 	} else {
-	    print "The alignment identity threshold has to be a number between 0 and 1\n";
+	    print STDERR "The alignment identity threshold has to be a number between 0 and 1\n";
 	    help();
 	}
     } else {
-        print "The default identity threshold of 0.5 will be used\n";
+        print STDERR "The default identity threshold of 0.5 will be used\n";
     }
     
     if($opts{f}) {
 	$frag = "yes";
-	print "The extract fragment flag has been given\n";
+	print STDERR "The extract fragment flag has been given\n";
     }
 
     #($help, $fastq1, $fastq2, $query, $outDir, $outName, $length, $identity, $gSize, $frag)
@@ -159,11 +159,9 @@ my ($help, $fastq1, $fastq2, $query, $outDir, $outName, $length, $identity, $gSi
 
 
 
-###Subroutines###
-
+# Returns the total sequence length from a (multi)-FASTA string.
 sub fasta_seq_length {
     my ($seq) = @_;
-    #open ( my $q_seq, "<", $seq ) or die "Could not open file '$seq': $!";    
     my @lines = split /\n/, $seq;
     my $final_line = "";
     foreach my $line (@lines) {
@@ -171,8 +169,7 @@ sub fasta_seq_length {
 	if ($line =~ /^>/) {
 	    next;
 	} else {
-	    #print "line: $line\n";
-	    $final_line = $final_line.$line;
+            $final_line .= $line;
         }
     }
     return length($final_line);
@@ -181,19 +178,19 @@ sub fasta_seq_length {
 sub extractFastaByID {
     my ($lookup, $reference) = @_;
     open my $fh, "<", $reference or die $!;
-    #print "lookup: $lookup\n";
+    #print STDERR "lookup: $lookup\n";
     local $/ = "\n>";  # read by FASTA record
 
     my $output;
     while (my $seq = <$fh>) {
 	chomp $seq;
-	#print "while seq:\n$seq\n";
+	#print STDERR "while seq:\n$seq\n";
 	my ($id) = $seq =~ /^>*(\S+)/;  # parse ID as first word in FASTA header
 	if ($id eq $lookup) {
 	    $seq =~ s/^>*.+\n//;  # remove FASTA header
 	    #$seq =~ s/\n//g;  # remove endlines
-	    #print ">$id\n";
-	    #print "$seq\n";
+	    #print STDERR ">$id\n";
+	    #print STDERR "$seq\n";
 	    $output = ">$id\n$seq\n";
 	    last;
 	}
@@ -206,54 +203,33 @@ sub extractFastaByID {
 
 ##Start Doing Stuff##
 chdir "$outDir";
-###Preprocess with Cutadapt###
-my $fastq1_trimd = "cutadapt_".$outName."_S1_L001_R1_001.fastq";
-my $fastq2_trimd = "cutadapt_".$outName."_S1_L001_R2_001.fastq";
-if( -e $fastq1_trimd) {
-    print "Fastq files have already been preprocessed\n";
-} else {
-    print "Beginning cutadapt\n";
-    system("cutadapt -b AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC -q 20 --minimum-length 50 --paired-output temp2.fastq -o temp1.fastq $fastq1 $fastq2");
-    system("cutadapt -b AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT -q 20 --minimum-length 50 --paired-output $fastq1_trimd -o $fastq2_trimd temp2.fastq temp1.fastq");
-    #system("cutadapt -b AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC -b CTGTCTCTTATA -q 20 --minimum-length 50 --paired-output temp2.fastq -o temp1.fastq $fastq1 $fastq2"); #Removing Nextera#
-    #system("cutadapt -b AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT -b CTGTCTCTTATA -q 20 --minimum-length 50 --paired-output $fastq1_trimd -o $fastq2_trimd temp2.fastq temp1.fastq");
-    my $tempDel_1 = "temp1.fastq";
-    my $tempDel_2 = "temp2.fastq";
-    unlink $tempDel_1;
-    unlink $tempDel_2;
-}
+my $velvet_output = dirname($fastq1) . "/velvet_assembly";
+my $contigs = $velvet_output . "/contigs.fa";
+( -f "$contigs") || die "Could not find velvet output at $velvet_output";
 
-if( -d "./velvet_output") {
-    print "Velvet assembly has already been completed\n";
-} else {
-    print "Beginning Velvet\n";
-    my $velvetK_val = `velvetk.pl --best --size "$gSize" "$fastq1_trimd" "$fastq2_trimd"`;
-    `VelvetOptimiser.pl -s "$velvetK_val" -e "$velvetK_val" -o "-scaffolding no" -f "-shortPaired -separate -fastq $fastq1_trimd $fastq2_trimd" -d velvet_output`;  #-c "(Lbp*n50)/ncon"`;
-}
-
-print "Beginning Prodigal\n";
+print STDERR "Beginning Prodigal\n";
 if (glob("prodigal_$outName*")) {
-    print "Gene prediction has already been completed\n";
+    print STDERR "Gene prediction has already been completed\n";
 } else {
-    system("prodigal -c -f gff -i ./velvet_output/contigs.fa -a PRE_$outName.faa -o prodigal_$outName.gff -d PRE_$outName.fasta");
+    system("prodigal -c -f gff -i $contigs -a PRE_$outName.faa -o prodigal_$outName.gff -d PRE_$outName.fasta");
     `cat PRE_"$outName".faa | sed 's/ # .*//g' > prodigal_"$outName".faa`;
     `cat PRE_"$outName".fasta | sed 's/ # .*//g' > prodigal_"$outName".fna`;
     unlink("PRE_$outName.faa");
     unlink("PRE_$outName.fasta");
 }
 
-print "Create a blast database using the predicted genes obtained from Prodigal\n";
+print STDERR "Create a blast database using the predicted genes obtained from Prodigal\n";
 if (glob("TEMP_prod_nucl_blast_db*")) {
-    print "Contig blast database has already been created\n";
+    print STDERR "Contig blast database has already been created\n";
 } else {
     system("makeblastdb -in prodigal_$outName.fna -dbtype nucl -out TEMP_prod_nucl_blast_db");
 }
 
-print "Create a blast database using the assembled contigs obtained from Velvet\n";
+print STDERR "Create a blast database using the assembled contigs obtained from Velvet\n";
 if (glob("TEMP_velvet_nucl_blast_db*")) {
-    print "Contig blast database has already been created\n";
+    print STDERR "Contig blast database has already been created\n";
 } else {
-    system("makeblastdb -in ./velvet_output/contigs.fa -dbtype nucl -out TEMP_velvet_nucl_blast_db");
+    system("makeblastdb -in $contigs -dbtype nucl -out TEMP_velvet_nucl_blast_db");
 }
 
 ###Blast each sequence given in the query fasta file against the blast nucleotide database.###
@@ -267,10 +243,9 @@ while ( my $line = <$q_seq> ) {
     }
 }
 close $q_seq;
-#print "query names:\n$query_names[0]";
+#print STDERR "query names:\n$query_names[0]";
 
-foreach (@query_names) {
-    my $query_name = $_;
+foreach my $query_name (@query_names) {
     my $extract_out = "EXTRACT_".$query_name."_target.fasta";
     my $error_out = "ERROR_".$query_name."_target.fasta";
 
@@ -296,10 +271,10 @@ foreach (@query_names) {
     my $match_len = $length * $query_length;
     my $match_iden = $identity * 100;
 
-    print "\nprodigal gene name of best hit against the query sequence: $best_name\n";
-    print "% identity of best hit against the query sequence: $best_iden\n";
-    print "length of best hit against the query sequence: $best_len\n";
-    print "match length threshold: $match_len\n";
+    print STDERR "\nprodigal gene name of best hit against the query sequence: $best_name\n";
+    print STDERR "% identity of best hit against the query sequence: $best_iden\n";
+    print STDERR "length of best hit against the query sequence: $best_len\n";
+    print STDERR "match length threshold: $match_len\n";
 
     if ($best_iden >= $match_iden && $best_len >= $match_len) {
 	#my $prodigal_fna = `extractFastaByID.pl $best_name < prodigal_"$outName".fna`;
@@ -319,7 +294,7 @@ foreach (@query_names) {
     ###and will attempt to extract the full fragment from the predicted gene sequence.###
     ###The number of non-aligning bases at each end of the matching target sequence will recorded in the header name.###
     if ($frag) {
-	print "Extracting target fragment\n";
+	print STDERR "Extracting target fragment\n";
 	#my $velvet_blast = "velvet-vs-query_".$query_name."_blast.txt";
 	system("blastn -db TEMP_velvet_nucl_blast_db -query TEMP_query_sequence.fna -outfmt 6 -word_size 7 -out TEMP_velvet-vs-query_blast.txt");
 	my $bestHit = `cat TEMP_velvet-vs-query_blast.txt | sort -k12,12 -nr -k3,3 -k4,4 | head -n 1`;
@@ -330,11 +305,11 @@ foreach (@query_names) {
 	my $query_strt = $bestArray[6];
 	my $query_end = $bestArray[7];
 	my $frag_length = $best_len / $query_length;
-	#print "best hit: $bestHit || $frag_length\n";
+	#print STDERR "best hit: $bestHit || $frag_length\n";
 	
-	print "\ncontig name of best hit against the query sequence: $best_name\n";
-	print "% identity of best hit against the query sequence: $best_iden\n";
-	print "length of best hit against the query sequence: $best_len\n";
+	print STDERR "\ncontig name of best hit against the query sequence: $best_name\n";
+	print STDERR "% identity of best hit against the query sequence: $best_iden\n";
+	print STDERR "length of best hit against the query sequence: $best_len\n";
 	
 	if ($best_iden >= 50 && $frag_length >= 0.50) {
 	    print $exOUT "\n$query_name Query Fragment Sequence:\n";
@@ -346,7 +321,7 @@ foreach (@query_names) {
 		open(my $fh, '>', 'TEMP_frwd_extract.bed') or die "Could not open file 'TEMP_frwd_extract.bed' $!";
 		print $fh "$best_name\t$frag_start\t$frag_end\n";
 		close $fh;
-		my $extract_frag_frwd = `bedtools getfasta -fi ./velvet_output/contigs.fa -bed TEMP_frwd_extract.bed -fo stdout`;
+		my $extract_frag_frwd = `bedtools getfasta -fi $contigs -bed TEMP_frwd_extract.bed -fo stdout`;
 		if($extract_frag_frwd) {
 		    print $exOUT "$extract_frag_frwd\n";
 		} else {
@@ -364,9 +339,9 @@ foreach (@query_names) {
 		print $fh "$best_name\t$frag_end\t$frag_start\n";
 		close $fh;
 
-		my $extract_frag_rev = `bedtools getfasta -tab -fi ./velvet_output/contigs.fa -bed TEMP_rev_extract.bed -fo stdout`;
+		my $extract_frag_rev = `bedtools getfasta -tab -fi $contigs -bed TEMP_rev_extract.bed -fo stdout`;
 		if ($extract_frag_rev) {
-		    #print "extract frag is:\n$extract_frag_rev\n";
+		    #print STDERR "extract frag is:\n$extract_frag_rev\n";
 		    my @rev_frag_array = split('\t',$extract_frag_rev);
 		    my $rev_comp_frag = reverse($rev_frag_array[1]);
 		    $rev_comp_frag =~ tr/ATGCatgc/TACGtacg/;

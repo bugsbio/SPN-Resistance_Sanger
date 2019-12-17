@@ -1,4 +1,6 @@
-#!/bin/bash -l
+#!/usr/bin/env bash
+
+echoerr() { printf "%s\n" "$*" >&2; }
 
 x1="0"
 if [ -d "$1" ]; then
@@ -16,19 +18,19 @@ fi
 if [ "$x1" == "1" ]; then
   install_path=$2
   d1=$1
-  echo "Data folder is $d1"
-  echo "Install path is $install_path"
+  echoerr "Data folder is $d1"
+  echoerr "Install path is $install_path"
 else
-  echo "usage bash ./PBP_AA_sampledir_to_MIC_20171207 data_dir install_path"
-  echo ""
-  echo "install_path is a directory that contains the wrapper scripts/install"
-  echo "data_dir is a directory that must conatin 3 files with the following exact names, respectively:"
-  echo "EXTRACT_1A-S2_target.fasta"
-  echo "EXTRACT_2B-S2_target.fasta"
-  echo "EXTRACT_2B-S2_target.fasta"
-  echo ""
-  echo "See README.txt for details"
-  echo "Program not run"  
+  echoerr "usage ./PBP_AA_sampledir_to_MIC_20171207 data_dir install_path"
+  echoerr ""
+  echoerr "install_path is a directory that contains the wrapper scripts/install"
+  echoerr "data_dir is a directory that must conatin 3 files with the following exact names, respectively:"
+  echoerr "EXTRACT_1A-S2_target.fasta"
+  echoerr "EXTRACT_2B-S2_target.fasta"
+  echoerr "EXTRACT_2B-S2_target.fasta"
+  echoerr ""
+  echoerr "See README.txt for details"
+  echoerr "Program not run"
   exit 1
 fi
 
@@ -75,7 +77,7 @@ fout="$AAseqDir"/Sample_PBPtype_MIC2_Prediction.csv_MIC_formatted_with_SIR.csv
 #WGS_ZOX_SIGN WGS_ZOX WGS_ZOX_SIR 
 #WGS_FOX_SIGN WGS_FOX WGS_FOX_SIR 
 
-cd "$AAseqDir"
+cd "$AAseqDir" || exit 1
 awk 'NR<=2'  $fout | awk -F"," '{$1=""; print $0}'  | sed 's/"//g' | sed 's/ //' > temp1.txt
 echo "WGS_AMP_SIGN WGS_AMP WGS_AMP_SIR \
 WGS_CPT_SIGN WGS_CPT WGS_CPT_SIR \
@@ -88,8 +90,7 @@ NA NA NA \
 NA NA NA " >> temp2.txt
 paste -d ' ' temp1.txt temp2.txt>"$d1""/BLACTAM_MIC_RF_with_SIR.txt"
 
-echo "BLACTAM MIC output file:" "$d1""/BLACTAM_MIC_RF_with_SIR.txt"
+echoerr "BLACTAM MIC output file:" "$d1""/BLACTAM_MIC_RF_with_SIR.txt"
 
 rm -f temp* 
-#rm -rf $AAseqDir
 

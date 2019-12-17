@@ -1,6 +1,5 @@
-#!/bin/bash -l
+#!/usr/bin/env bash
 
-#. /usr/share/Modules/init/bash
 ###This wrapper script validates the input arguments and creates the job-control.txt file which is needed to submit the qsub array job to the cluster.###
 
 while getopts :f:r:o: option
@@ -132,6 +131,6 @@ done < "$fastq_list"
 uuid=$(cat /proc/sys/kernel/random/uuid)
 job_prefix="SPN_Run-${uuid}"
 
-bsub -R"select[mem>10000] rusage[mem=10000]" -M10000 -J "${job_prefix}[1-$(cat $out_jobCntrl/job-control.txt | wc -l)]" -o ${out_qsub}output.%J.%I -e ${out_qsub}errorfile.%J.%I "sh Sanger-JanOw_SPN-Typer.sh $out_jobCntrl"
+bsub -R"select[mem>10000] rusage[mem=10000]" -M10000 -J "${job_prefix}[1-$(cat $out_jobCntrl/job-control.txt | wc -l)]" -o ${out_qsub}output.%J.%I -e ${out_qsub}errorfile.%J.%I "Sanger-JanOw_SPN-Typer.sh $out_jobCntrl"
 
 bsub -R"select[mem>1000] rusage[mem=1000]" -M1000 -w "ended(${job_prefix}*)" -J SPN-merge-${uuid} -o ${out_qsub}merge.o -e ${out_qsub}merge.e Sanger-JanOw_SPN-merge.sh "$out_jobCntrl" "$out_analysis"
