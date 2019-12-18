@@ -1,0 +1,5 @@
+build/
+tests/summary.txt
+.vagrant/
+*.log
+.idea/

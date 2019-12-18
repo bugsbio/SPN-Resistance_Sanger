@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 data_dir=/scicomp/groups/OID/NCIRD/DBD/RDB/Strep_Lab/SPN_Typing_Output/\
 18-B-429_Illumina-MiSeq-M03220/190621_M03220_0049_000000000-CHCYF_test/\

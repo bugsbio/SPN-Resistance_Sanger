@@ -3,7 +3,7 @@
 Build_PBP_AA_table<- function(datafolder)
 {
 
-  #Four Files required in the datafolder wiith exact names as following: 
+  #Four Files required in the datafolder with exact names as following:
   #file1: Ref_PBP_3.faa: containing the 3 reference PBP AA sequences
   #file2: Sample_PBP1A_AA.faa:   containing PBP1A AA sequences from ALL samples 
   #file3: Sample_PBP2B_AA.faa:   containing PBP2B AA sequences from ALL samples 
@@ -61,9 +61,9 @@ Build_PBP_AA_table<- function(datafolder)
       x1=as.character(seq1A[j1][[1]])
       x2=as.character(seqREF["PBP1A_SP0369_AA371-647"][[1]])
       if (nchar(x1) < nchar(x2)/2) {NF1A=1}
-        # sample seq lentgh less than half of REF length: consider as NF 
+        # sample seq length less than half of REF length: consider as NF
       if (nchar(gsub("-","",x1)) < nchar(x2)/2) {NF1A=1}
-        # sample contians "-" more than half of REF length: consider as NF 
+        # sample contains "-" more than half of REF length: consider as NF
     }
 
     if (NF1A==0)
@@ -72,7 +72,6 @@ Build_PBP_AA_table<- function(datafolder)
       writeXStringSet(seq1A[j1], file="tempSAM1A.faa", , append=T  )
     
       cmd2=" -i tempSAM1A.faa -o tempSAM1A.faa.aln --wrap=3000 --force  --output-order=input-order"
-      #cmd3=paste(cmd0, cmd1, cmd2, sep="")
       cmd3=paste(cmd1, cmd2, sep="")
       system(cmd3)
 
@@ -143,7 +142,6 @@ Build_PBP_AA_table<- function(datafolder)
       writeXStringSet(seq2B[j1], file="tempSAM1A.faa", , append=T  )
     
       cmd2=" -i tempSAM1A.faa -o tempSAM1A.faa.aln --wrap=3000 --force  --output-order=input-order"
-      #cmd3=paste(cmd0, cmd1, cmd2, sep="")
       cmd3=paste(cmd1, cmd2, sep="")
       system(cmd3)
 
@@ -216,7 +214,6 @@ Build_PBP_AA_table<- function(datafolder)
       writeXStringSet(seq2X[j1], file="tempSAM1A.faa", , append=T  )
     
       cmd2=" -i tempSAM1A.faa -o tempSAM1A.faa.aln --wrap=3000 --force  --output-order=input-order"
-      #cmd3=paste(cmd0, cmd1, cmd2, sep="")
       cmd3=paste(cmd1, cmd2, sep="")
       system(cmd3)
 
