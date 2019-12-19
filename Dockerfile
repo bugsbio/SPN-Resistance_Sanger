@@ -74,7 +74,9 @@ ENV PATH="/opt/bowtie2-2.2.9:${PATH}"
 RUN cd /tmp \
     && git clone --recursive  https://github.com/ekg/freebayes \
     && cd freebayes \
+    && git submodule foreach --recursive 'git fetch --tags' \
     && git checkout v1.3.2 \
+    && git submodule update --recursive \
     && make \
     && mv bin/freebayes /usr/local/bin \
     && cd /tmp \
