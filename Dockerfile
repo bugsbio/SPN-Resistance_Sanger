@@ -38,7 +38,7 @@ RUN apt-get update -y -qq \
       && pip install git+https://github.com/katholt/srst2@v0.2.0 \
       && sed -i -e 's/# \(en_GB\.UTF-8 .*\)/\1/' /etc/locale.gen \
       && touch /usr/share/locale/locale.alias \
-      locale-gen
+      && locale-gen
 
 # Perl locals
 ENV LANG en_GB.UTF-8
