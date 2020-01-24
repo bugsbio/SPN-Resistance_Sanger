@@ -54,7 +54,9 @@ then
     printf "$bLacTab\t" >> "$tabl_out"
 else
     echoerr "One of the PBP types has an NF"
-    printf "NF\tNF\tNF\tNF\tNF\tNF\tNF\tNF\tNF\tNF\tNF\tNF\t" >> "$tabl_out"
+    for i in {1..33}; do
+      printf "NF\t" >> "$tabl_out"
+    done
 fi
 
 ###Resistance Targets###
