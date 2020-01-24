@@ -203,12 +203,14 @@ sub extractFastaByID {
 
 ##Start Doing Stuff##
 chdir "$outDir";
-my $velvet_output = dirname($fastq1) . "/velvet_assembly";
-my $contigs = $velvet_output . "/contigs.fa";
-( -f "$contigs") || die "Could not find velvet output at $velvet_output";
-system("mkdir ./velvet_output");
-system("ln -s $contigs ./velvet_output/contigs.fa");
-$contigs = "./velvet_output/contigs.fa";
+my $contigs = "./velvet_output/contigs.fa";
+if ( ! -e "./velvet_output/contigs.fa") {
+  my $velvet_output = dirname($fastq1) . "/velvet_assembly";
+  my $calculated_contigs = $velvet_output . "/contigs.fa";
+  ( -e "$calculated_contigs") || die "Could not find velvet output at $velvet_output";
+  system("mkdir -p ./velvet_output");
+  system("ln -s $calculated_contigs $contigs");
+}
 print STDERR "Beginning Prodigal\n";
 if (glob("prodigal_$outName*")) {
     print STDERR "Gene prediction has already been completed\n";
