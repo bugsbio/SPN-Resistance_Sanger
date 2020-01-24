@@ -205,17 +205,18 @@ sub extractFastaByID {
 chdir "$outDir";
 my $contigs = "./velvet_output/contigs.fa";
 if ( -e "$contigs") {
-  print STDERR "Found velvet output";
+  print STDERR "Found velvet output\n";
 }
 else {
-  print STDERR "Velvet output not found, linking it";
+  print STDERR "Velvet output not found, linking it\n";
   my $velvet_output = dirname($fastq1) . "/velvet_assembly";
   my $calculated_contigs = $velvet_output . "/contigs.fa";
   ( -e "$calculated_contigs") || die "Could not find velvet output at $velvet_output";
   system("mkdir -p ./velvet_output");
   system("ln -s $calculated_contigs $contigs");
 }
-( ! -e "$contigs") || die "Could not find velvet output at $outDir/velvet_output/contigs.fa";
+
+( -e "$contigs") || die "Could not find velvet output at " . $outDir. "/velvet_output/contigs.fa";
 
 print STDERR "Beginning Prodigal\n";
 if (glob("prodigal_$outName*")) {
