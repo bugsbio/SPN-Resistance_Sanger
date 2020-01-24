@@ -213,5 +213,11 @@ if ($Res_hash{"OTHER"} eq "neg") {
     $Out_hash{"OTHER"} = "$Res_hash{OTHER},$drug{CHL},$drug{RIF},$drug{VAN},$drug{DAP}";
 }
 
+#Replace all commas by semi-colons
+$Out_hash{EC} =~ s/,/;/g;
+$Out_hash{COT} =~ s/,/;/g;
+$Out_hash{TET} =~ s/,/;/g;
+$Out_hash{FQ} =~ s/,/;/g;
+$Out_hash{OTHER} =~ s/,/;/g;
 print $fh $Out_hash{EC}.",". $Out_hash{COT}.",".$Out_hash{TET}.",".$Out_hash{FQ}.",".$Out_hash{OTHER}."\n";
 print STDERR  "$Out_hash{EC}||$Out_hash{COT}||$Out_hash{TET}||$Out_hash{FQ}||$Out_hash{OTHER}\n";
