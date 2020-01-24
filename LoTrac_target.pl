@@ -207,7 +207,7 @@ my $velvet_output = dirname($fastq1) . "/velvet_assembly";
 my $contigs = $velvet_output . "/contigs.fa";
 ( -f "$contigs") || die "Could not find velvet output at $velvet_output";
 system("mkdir ./velvet_output");
-system("ln -s $contigs .velvet_output/contigs.fa");
+system("ln -s $contigs ./velvet_output/contigs.fa");
 $contigs = "./velvet_output/contigs.fa";
 print STDERR "Beginning Prodigal\n";
 if (glob("prodigal_$outName*")) {
