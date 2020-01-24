@@ -214,6 +214,5 @@ if ($Res_hash{"OTHER"} eq "neg") {
 }
 
 #Replace all commas by semi-colons in FQ
-$Out_hash{FQ} =~ s/,/;/g;
 print $fh $Out_hash{EC}.",". $Out_hash{COT}.",".$Out_hash{TET}.",".$Out_hash{FQ}.",".$Out_hash{OTHER}."\n";
 print STDERR  "$Out_hash{EC}||$Out_hash{COT}||$Out_hash{TET}||$Out_hash{FQ}||$Out_hash{OTHER}\n";

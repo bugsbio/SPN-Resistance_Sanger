@@ -653,7 +653,7 @@ if ($Res_Targets{"PARC"} eq "pos") {
 	    }
         }
         print STDERR "PARC seq: $PARC_seq\n";
-        my $diff_output = join(',',@seq_diffs);
+        my $diff_output = join(';',@seq_diffs);
         #my $bin_out = join(':',@seq_diffs);
         #$Bin_Res_arr[14] = $bin_out;
         my $PARC_out = "PARC-".$diff_output;
@@ -684,7 +684,7 @@ if ($Res_Targets{"GYRA"} eq "pos") {
             push(@seq_diffs,$diff_element);
         }
         print STDERR "GYRA seq: $GYRA_seq\n";
-        my $diff_output = join(',',@seq_diffs);
+        my $diff_output = join(';',@seq_diffs);
         #my $bin_out = join(':',@seq_diffs);
         #$Bin_Res_arr[10] = $bin_out;
         my $GYRA_out = "GYRA-".$diff_output;
