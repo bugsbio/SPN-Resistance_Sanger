@@ -91,3 +91,6 @@ RUN mkdir /opt/SPN-Resistance_Sanger \
     && rm -rf /tmp/BUILD_SPN-Resistance_Sanger
 
 ENV PATH="/opt/SPN-Resistance_Sanger:/opt/SPN-Resistance_Sanger/bLactam_MIC_Rscripts:${PATH}"
+
+RUN mkdir -p /work/db && cd /work/db && spn-build-db.sh
+RUN pip install awscli
